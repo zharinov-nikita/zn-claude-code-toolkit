@@ -1,6 +1,5 @@
 {
   "name": "zn-claude-code-toolkit",
-  "version": "0.2.0",
   "description": "Personal toolkit plugin with assorted tools for Claude Code",
   "author": {
     "name": "zharinov-nikita",

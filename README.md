@@ -2,7 +2,16 @@
 
 Personal toolkit plugin for Claude Code. A growing collection of assorted tools: skills, agents, hooks, and integrations.
 
-## Installation (local)
+## Installation
+
+From GitHub (once the repo is pushed):
+
+```
+/plugin marketplace add zharinov-nikita/zn-claude-code-toolkit
+/plugin install zn-claude-code-toolkit@zn-claude-code-toolkit
+```
+
+Local development:
 
 ```bash
 claude --plugin-dir C:\Users\NikitaDev\Desktop\projects\zn-claude-code-toolkit

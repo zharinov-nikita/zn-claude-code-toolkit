@@ -1,0 +1,15 @@
+{
+  "name": "zn-claude-code-toolkit",
+  "owner": {
+    "name": "zharinov-nikita",
+    "email": "zharinov.nicita@gmail.com"
+  },
+  "description": "Personal toolkit plugins for Claude Code",
+  "plugins": [
+    {
+      "name": "zn-claude-code-toolkit",
+      "source": "./",
+      "description": "Personal toolkit plugin with assorted tools for Claude Code"
+    }
+  ]
+}
