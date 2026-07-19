@@ -1,0 +1,11 @@
+{
+  "name": "zn-claude-code-toolkit",
+  "version": "0.1.0",
+  "description": "Personal toolkit plugin with assorted tools for Claude Code",
+  "author": {
+    "name": "zharinov-nikita",
+    "email": "zharinov.nicita@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": ["toolkit", "utilities"]
+}
