@@ -1,0 +1,16 @@
+{
+  "description": "Injects a response-language instruction into context on every user prompt",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -n \"$ZN_RESPONSE_LANGUAGE\" ]; then echo \"Always respond to the user in $ZN_RESPONSE_LANGUAGE, regardless of the language of their message. Keep technical terms and code identifiers in their original form (commit, pull request, function names, flags, etc.). Maintain full orthographic correctness for $ZN_RESPONSE_LANGUAGE, including all required diacritics and special characters; never substitute them with ASCII lookalikes.\"; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

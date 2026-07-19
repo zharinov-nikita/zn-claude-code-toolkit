@@ -16,12 +16,25 @@ zn-claude-code-toolkit/
 │   └── plugin.json     # Plugin manifest
 ├── skills/             # Skills and slash commands (added as needed)
 ├── agents/             # Subagents (added as needed)
-└── hooks/              # Event hooks (added as needed)
+└── hooks/
+    ├── hooks.json      # Hook registrations
+    └── scripts/        # Hook implementations
 ```
 
 ## Tools
 
-_None yet — tools will be added here as they are created._
-
 | Tool | Type | Description |
 |------|------|-------------|
+| inject-language | Hook (UserPromptSubmit) | Injects a response-language instruction into context on every prompt |
+
+### inject-language
+
+Makes Claude Code always respond in your chosen language. Configuration — a single env var:
+
+```
+ZN_RESPONSE_LANGUAGE=Русский   # free-form: English, Deutsch, ...
+```
+
+When the variable is not set, the hook stays silent and Claude Code behaves as usual.
+
+No scripts, no runtime dependencies — a plain `echo` inside `hooks.json`. On Windows the command runs in Git Bash (Claude Code's default hook shell). Hooks load on session start — restart Claude Code after installing or changing the variable.
