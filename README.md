@@ -16,9 +16,8 @@ zn-claude-code-toolkit/
 │   └── plugin.json     # Plugin manifest
 ├── skills/             # Skills and slash commands (added as needed)
 ├── agents/             # Subagents (added as needed)
-└── hooks/
-    ├── hooks.json      # Hook registrations
-    └── scripts/        # Hook implementations
+└── hooks/              # One JSON file per hook, listed in plugin.json "hooks" array
+    └── inject-language.json
 ```
 
 ## Tools
