@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "zn-claude-code-toolkit",
   "description": "Personal toolkit plugin with assorted tools for Claude Code",
   "author": {
@@ -16,6 +17,7 @@
     "./hooks/inject-grounding.json",
     "./hooks/inject-gui-launch.json",
     "./hooks/enforce-ask-user-question.json",
-    "./hooks/desktop-watcher.json"
+    "./hooks/desktop-watcher.json",
+    "./hooks/validate-json.json"
   ]
 }

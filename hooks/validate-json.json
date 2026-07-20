@@ -1,0 +1,17 @@
+{
+  "description": "Validates .json files right after Write/Edit; on syntax error feeds it back to Claude immediately. Requires bun; silently skipped when bun is not installed",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if command -v bun >/dev/null 2>&1; then bun run \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/validate-json.ts\"; fi",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
