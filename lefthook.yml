@@ -1,0 +1,15 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: biome
+      glob: "*.{json,ts,js,jsx,tsx}"
+      run: bunx biome check --no-errors-on-unmatched "{staged_files}"
+    - name: typescript
+      glob: "*.ts"
+      run: bun run check:ts
+    - name: markdown
+      glob: "*.md"
+      run: bunx markdownlint-cli2 "{staged_files}"
+    - name: powershell
+      glob: "*.ps1"
+      run: bun run check:ps
