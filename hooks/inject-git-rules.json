@@ -1,0 +1,16 @@
+{
+  "description": "Injects git commit rules (Conventional Commits, no co-author trailers) into context on every user prompt",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat \"${CLAUDE_PLUGIN_ROOT}/hooks/git-rules.md\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -8,6 +8,7 @@
   "license": "MIT",
   "keywords": ["toolkit", "utilities"],
   "hooks": [
-    "./hooks/inject-language.json"
+    "./hooks/inject-language.json",
+    "./hooks/inject-git-rules.json"
   ]
 }
