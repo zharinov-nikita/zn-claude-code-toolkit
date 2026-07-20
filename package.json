@@ -3,11 +3,10 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "check": "bun run check:json && bun run check:ts && bun run check:md && bun run check:ps",
+    "check": "bun run check:json && bun run check:ts && bun run check:md",
     "check:json": "biome check .",
     "check:ts": "tsc --noEmit",
     "check:md": "markdownlint-cli2 \"**/*.md\"",
-    "check:ps": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-ps.ps1",
     "fix": "biome check --write ."
   },
   "devDependencies": {

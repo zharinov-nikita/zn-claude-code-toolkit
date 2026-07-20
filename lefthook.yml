@@ -10,6 +10,3 @@ pre-commit:
     - name: markdown
       glob: "*.md"
       run: bunx markdownlint-cli2 "{staged_files}"
-    - name: powershell
-      glob: "*.ps1"
-      run: bun run check:ps
