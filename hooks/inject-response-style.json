@@ -1,0 +1,16 @@
+{
+  "description": "Injects response style rules (BLUF, no filler) into context on every user prompt",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat \"${CLAUDE_PLUGIN_ROOT}/hooks/rules/response-style.md\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cat \"${CLAUDE_PLUGIN_ROOT}/hooks/git-rules.md\"",
+            "command": "cat \"${CLAUDE_PLUGIN_ROOT}/hooks/rules/git.md\"",
             "timeout": 10
           }
         ]

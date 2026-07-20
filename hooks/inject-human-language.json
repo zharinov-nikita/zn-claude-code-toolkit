@@ -1,0 +1,16 @@
+{
+  "description": "Injects human-language rules (no bureaucratic cliches, short sentences) into context on every user prompt",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat \"${CLAUDE_PLUGIN_ROOT}/hooks/rules/human-language.md\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
