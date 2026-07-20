@@ -17,14 +17,14 @@ interface ContentBlock {
 function asciiJson(obj: unknown): string {
   return JSON.stringify(obj).replace(
     /[^\x00-\x7f]/g,
-    (ch) => "\\u" + ch.charCodeAt(0).toString(16).padStart(4, "0"),
+    (ch) => `\\u${ch.charCodeAt(0).toString(16).padStart(4, "0")}`,
   );
 }
 
 function lastAssistantText(transcriptPath: string): string {
   const lines = readFileSync(transcriptPath, "utf8").split("\n");
   for (let i = lines.length - 1; i >= 0; i--) {
-    const line = lines[i]!.trim();
+    const line = lines[i]?.trim();
     if (!line) continue;
     let entry: any;
     try {
@@ -61,7 +61,8 @@ function isTextualChoiceQuestion(text: string): boolean {
   const plain = tail.map((l) => l.replace(/[*_`]+/g, "").trim());
 
   // Строки-варианты: "A. ...", "- **B.**", "1) ...", "**2.** ..."
-  const optionLine = /^(?:[-*]\s+)?(?:\*\*)?(?:[A-GА-Е]|\d{1,2})(?:\*\*)?[.)]\s/;
+  const optionLine =
+    /^(?:[-*]\s+)?(?:\*\*)?(?:[A-GА-Е]|\d{1,2})(?:\*\*)?[.)]\s/;
   const optionCount = tail.filter((l) => optionLine.test(l)).length;
 
   // Вопросительные триггеры выбора
@@ -69,11 +70,16 @@ function isTextualChoiceQuestion(text: string): boolean {
     /(как(ой|ую|ие|им)\s+(вариант|выб|подход|способ)|выбира(ешь|ете)|выбери|что\s+(выбираешь|скажешь)|можно\s+ли|продолжа(ем|ть)\s*\?|фиксируем\s*\?|скажи,?\s+(можно|какой|какие|что|нужны))/i;
 
   // Правило 1: есть список вариантов (>=2) и вопрос рядом
-  if (optionCount >= 2 && (trigger.test(tailStr) || plain.some((l) => /\?$/.test(l)))) {
+  if (
+    optionCount >= 2 &&
+    (trigger.test(tailStr) || plain.some((l) => /\?$/.test(l)))
+  ) {
     return true;
   }
   // Правило 2: явная просьба ответить текстом («скажи, можно ли…») даже без списка
-  if (/скажи,?\s+(можно\s+ли|какой|какие|что\s+измен|нужны\s+ли)/i.test(tailStr)) {
+  if (
+    /скажи,?\s+(можно\s+ли|какой|какие|что\s+измен|нужны\s+ли)/i.test(tailStr)
+  ) {
     return true;
   }
   return false;

@@ -1,0 +1,10 @@
+{
+  // Линт Markdown: структурные проблемы важны, стилистический шум — нет
+  "config": {
+    "default": true,
+    "MD013": false, // line length — длинные строки в правилах осознанны
+    "MD033": false, // inline HTML — используется в доках
+    "MD041": false // first line heading — не для всех файлов
+  },
+  "ignores": ["node_modules/**"]
+}

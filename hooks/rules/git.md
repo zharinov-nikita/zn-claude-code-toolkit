@@ -3,10 +3,12 @@
 These rules apply to all git operations in every project.
 
 ## Committing
+
 - **Never commit without the user's explicit permission.** Do not run `git commit` (or `git commit --amend`) on your own initiative. Stage and prepare changes if helpful, but wait for the user to say to commit.
 - Do not `git push` without explicit permission either.
 
 ## Commit messages
+
 - **Always write commit messages in English**, regardless of the conversation language.
 - **Never add a co-author trailer** (no `Co-Authored-By`, no "Generated with" attribution).
 - Use **Conventional Commits** format: `<type>(<optional scope>): <short summary>`.
@@ -24,7 +26,8 @@ These rules apply to all git operations in every project.
     - `ci` — CI configuration
 
 ### Examples
-```
+
+```text
 feat(auth): add login via email
 fix(planner): correct task sorting by date
 chore: update dependencies

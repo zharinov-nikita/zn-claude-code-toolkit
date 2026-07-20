@@ -1,0 +1,22 @@
+{
+  "name": "zn-claude-code-toolkit",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "check": "bun run check:json && bun run check:ts && bun run check:md && bun run check:ps",
+    "check:json": "biome check .",
+    "check:ts": "tsc --noEmit",
+    "check:md": "markdownlint-cli2 \"**/*.md\"",
+    "check:ps": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-ps.ps1",
+    "fix": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.4",
+    "@types/bun": "^1.3.14",
+    "lefthook": "^2.1.10",
+    "markdownlint-cli2": "^0.23.1"
+  },
+  "peerDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,3 +1,6 @@
 # Local per-project plugin settings
 .claude/*.local.md
 .claude/settings.local.json
+
+# Dev dependencies
+node_modules/

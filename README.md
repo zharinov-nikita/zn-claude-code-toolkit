@@ -6,7 +6,7 @@ Personal toolkit plugin for Claude Code. A growing collection of assorted tools:
 
 From GitHub (once the repo is pushed):
 
-```
+```text
 /plugin marketplace add zharinov-nikita/zn-claude-code-toolkit
 /plugin install zn-claude-code-toolkit@zn-claude-code-toolkit
 ```
@@ -17,9 +17,18 @@ Local development:
 claude --plugin-dir C:\Users\NikitaDev\Desktop\projects\zn-claude-code-toolkit
 ```
 
+## Development
+
+Dev toolchain (`bun install` first): [Biome](https://biomejs.dev) for JSON/TS lint+format, `tsc` for type checking, markdownlint for Markdown, PSScriptAnalyzer for PowerShell (install once: `Install-Module PSScriptAnalyzer -Scope CurrentUser`).
+
+```bash
+bun run check      # all checks: json, ts, md, ps
+bun run fix        # apply Biome autofixes
+```
+
 ## Structure
 
-```
+```text
 zn-claude-code-toolkit/
 ├── .claude-plugin/
 │   └── plugin.json     # Plugin manifest
@@ -38,7 +47,7 @@ zn-claude-code-toolkit/
 ## Tools
 
 | Tool | Type | Description |
-|------|------|-------------|
+| ------ | ------ | ------------- |
 | inject-language | Hook (UserPromptSubmit) | Injects a response-language instruction into context on every prompt (env-driven) |
 | inject-git-rules | Hook (UserPromptSubmit) | Git rules: Conventional Commits, English messages, no co-author trailers, no commits without permission |
 | inject-response-style | Hook (UserPromptSubmit) | Response style: bottom line first, length follows complexity, no filler |
@@ -47,13 +56,14 @@ zn-claude-code-toolkit/
 | inject-grounding | Hook (UserPromptSubmit) | Verify APIs/configs via ctx7 CLI and web search instead of memory |
 | inject-gui-launch | Hook (UserPromptSubmit) | GUI launch rules for the virtual-desktop watcher (Windows only) |
 | enforce-ask-user-question | Hook (Stop) | Blocks answers ending with a textual multiple-choice question; requires bun |
+| validate-json | Hook (PostToolUse) | Validates .json files right after Write/Edit and feeds syntax errors back to Claude; requires bun |
 | desktop-watcher | Hook (SessionStart + Pre/PostToolUse) | Moves GUI windows opened by the session to Claude's virtual desktop (Windows only) |
 
 ### inject-language
 
 Makes Claude Code always respond in your chosen language. Configuration — a single env var:
 
-```
+```text
 ZN_RESPONSE_LANGUAGE=Русский   # free-form: English, Deutsch, ...
 ```
 
@@ -75,6 +85,10 @@ Each hook `cat`s one markdown file from `hooks/rules/` into context on every pro
 ### enforce-ask-user-question
 
 Stop hook: if the final answer ends with a textual multiple-choice question, blocks the stop and forces re-asking via the AskUserQuestion tool. Requires [bun](https://bun.sh); silently skipped when bun is missing.
+
+### validate-json
+
+PostToolUse hook on Write/Edit: parses the touched `.json` file and, on a syntax error, blocks with the error message so Claude fixes it immediately. Skips JSONC-by-convention files (`tsconfig*.json`, `jsconfig*.json`, `devcontainer.json`, `.vscode/`, `.zed/`, `*.jsonc`). Requires [bun](https://bun.sh); silently skipped when bun is missing.
 
 ### desktop-watcher (Windows only)
 

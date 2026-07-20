@@ -1,4 +1,5 @@
 # Response style
+
 - Bottom line first (BLUF): the first line is the direct answer; details below.
 - Length follows complexity: simple question — 1-3 lines; complex — as long as needed, no filler.
 - Cut filler: no "great question", no "let's dive in", no closing summaries, no restating my question.
