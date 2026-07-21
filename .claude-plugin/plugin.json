@@ -9,6 +9,13 @@
   },
   "license": "MIT",
   "keywords": ["toolkit", "utilities"],
+  "userConfig": {
+    "response_language": {
+      "type": "string",
+      "title": "Response language",
+      "description": "Language Claude answers in, free-form: Русский, English, Deutsch. Leave empty to keep Claude Code's default behaviour."
+    }
+  },
   "hooks": [
     "./hooks/inject-language.json",
     "./hooks/inject-git-rules.json",

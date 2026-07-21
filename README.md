@@ -11,10 +11,21 @@ From GitHub (once the repo is pushed):
 /plugin install zn-claude-code-toolkit@zn-claude-code-toolkit
 ```
 
-Local development:
+From a local clone — this repo is a marketplace on its own, no GitHub involved. Point `marketplace add` at the directory holding `.claude-plugin/`, not at the JSON file:
+
+```text
+/plugin marketplace add ./
+/plugin install zn-claude-code-toolkit@zn-claude-code-toolkit
+```
+
+Paths resolve against the working directory Claude Code was started in, so `./` assumes a session opened at the repo root; from one level up it is `./zn-claude-code-toolkit`. A relative path must keep the `./` prefix — a bare name is read as a GitHub `owner/repo` shorthand and rejected. Forward slashes work on every platform, Windows included.
+
+The `plugin@marketplace` duplication is expected: both carry the same name here. The plugin is copied into the plugin cache on install, so after editing hooks in the working tree run `/plugin marketplace update` to pick the changes up. Add `--scope project` to keep the marketplace registered per project instead of globally. The same commands work from the shell as `claude plugin marketplace add ...`.
+
+Local development without installing anything:
 
 ```bash
-claude --plugin-dir C:\Users\NikitaDev\Desktop\projects\zn-claude-code-toolkit
+claude --plugin-dir .
 ```
 
 ## Development
@@ -67,7 +78,7 @@ zn-claude-code-toolkit/
 
 | Tool | Type | Description |
 | ------ | ------ | ------------- |
-| inject-language | Hook (UserPromptSubmit) | Injects a response-language instruction into context on every prompt (env-driven) |
+| inject-language | Hook (UserPromptSubmit) | Injects a response-language instruction into context on every prompt (asked for on install) |
 | inject-git-rules | Hook (UserPromptSubmit) | Git rules: Conventional Commits, English messages, no co-author trailers, no commits without permission |
 | inject-response-style | Hook (UserPromptSubmit) | Response style: bottom line first, length follows complexity, no filler |
 | inject-human-language | Hook (UserPromptSubmit) | Live language: no bureaucratic cliches, short sentences (Russian-oriented) |
@@ -82,15 +93,13 @@ zn-claude-code-toolkit/
 
 ### inject-language
 
-Makes Claude Code always respond in your chosen language. Configuration — a single env var:
+Makes Claude Code always respond in your chosen language. The value is a `userConfig` option declared in `plugin.json`, so Claude Code asks for it in a dialog when the plugin is enabled — nothing to hand-edit. Free-form: `Русский`, `English`, `Deutsch`. Change it later through `/plugin`; the value lands in `pluginConfigs` in your user `settings.json`.
 
-```text
-ZN_RESPONSE_LANGUAGE=Русский   # free-form: English, Deutsch, ...
-```
+Leave it empty and the hook stays silent, so Claude Code behaves as usual.
 
-When the variable is not set, the hook stays silent and Claude Code behaves as usual.
+Under the hood the option reaches the hook as the `CLAUDE_PLUGIN_OPTION_RESPONSE_LANGUAGE` environment variable. It cannot be inlined as `${user_config.response_language}`: Claude Code rejects that substitution in shell-form hook commands, since the configured value would be handed straight to the shell. The env var `ZN_RESPONSE_LANGUAGE` still works as a fallback when the option is unset — handy for setting the language per project through `env` in `.claude/settings.json`, which `pluginConfigs` itself does not support (it is read from user settings only).
 
-No scripts, no runtime dependencies — a plain `echo` inside the hook config. On Windows the command runs in Git Bash (Claude Code's default hook shell). Hooks load on session start — restart Claude Code after installing or changing the variable.
+No scripts, no runtime dependencies — a plain `echo` inside the hook config. On Windows the command runs in Git Bash (Claude Code's default hook shell). Hooks load on session start — restart Claude Code after changing the value.
 
 ### Rule-injection hooks (inject-*)
 
