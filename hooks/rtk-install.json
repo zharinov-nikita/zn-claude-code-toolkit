@@ -1,0 +1,16 @@
+{
+  "description": "Downloads the latest rtk binary into the plugin's private data directory on session start; removed together with the plugin. Requires bun; silently skipped when bun is not installed",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if command -v bun >/dev/null 2>&1; then bun run \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/rtk-install.ts\"; fi",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}

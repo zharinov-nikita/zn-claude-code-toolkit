@@ -32,11 +32,13 @@ bun run fix        # apply Biome autofixes
 zn-claude-code-toolkit/
 ├── .claude-plugin/
 │   └── plugin.json     # Plugin manifest
-├── skills/             # Skills and slash commands (added as needed)
+├── skills/             # Skills and slash commands
+│   └── rtk/            # rtk meta commands (savings analytics)
 ├── agents/             # Subagents (added as needed)
 └── hooks/              # One JSON file per hook, listed in plugin.json "hooks" array
     ├── inject-*.json   # Context-injection hooks (UserPromptSubmit)
     ├── enforce-ask-user-question.json
+    ├── rtk-*.json      # rtk installer (SessionStart) and proxy (PreToolUse)
     ├── rules/          # Markdown rule texts injected by inject-* hooks
     └── scripts/        # Script-backed hooks
         └── enforce-ask-user-question.ts   # Stop-hook logic (bun)
@@ -54,6 +56,9 @@ zn-claude-code-toolkit/
 | inject-grounding | Hook (UserPromptSubmit) | Verify APIs/configs via ctx7 CLI and web search instead of memory |
 | enforce-ask-user-question | Hook (Stop) | Blocks answers ending with a textual multiple-choice question; requires bun |
 | validate-json | Hook (PostToolUse) | Validates .json files right after Write/Edit and feeds syntax errors back to Claude; requires bun |
+| rtk-install | Hook (SessionStart) | Downloads the latest [rtk](https://github.com/rtk-ai/rtk) binary into the plugin's data directory; requires bun |
+| rtk-proxy | Hook (PreToolUse) | Routes Bash/PowerShell commands through rtk to cut token usage 60-90%; requires bun |
+| rtk | Skill | rtk meta commands: savings analytics, adoption stats, unfiltered escape hatches |
 
 ### inject-language
 
@@ -84,3 +89,18 @@ Stop hook: if the final answer ends with a textual multiple-choice question, blo
 ### validate-json
 
 PostToolUse hook on Write/Edit: parses the touched `.json` file and, on a syntax error, blocks with the error message so Claude fixes it immediately. Skips JSONC-by-convention files (`tsconfig*.json`, `jsconfig*.json`, `devcontainer.json`, `.vscode/`, `.zed/`, `*.jsonc`). Requires [bun](https://bun.sh); silently skipped when bun is missing.
+
+### rtk
+
+[rtk](https://github.com/rtk-ai/rtk) is a CLI proxy that filters and summarizes command output before it reaches the context (60-90% fewer tokens on dev operations). The plugin bundles the whole integration — no manual `rtk init` and nothing written outside the plugin:
+
+- **rtk-install** (SessionStart) downloads the latest release asset for the current platform into `${CLAUDE_PLUGIN_DATA}/bin`, verifying it against the release `checksums.txt`. The version comes from the redirect `github.com/rtk-ai/rtk/releases/latest` issues, so the rate-limited REST API is never touched. It re-checks at most once every 24 hours. The data directory is deleted by Claude Code when the plugin is uninstalled, so rtk leaves with it.
+- **rtk-proxy** (PreToolUse on Bash/PowerShell) runs `rtk hook claude` and repoints the rewritten command at that private binary — the plugin never touches PATH, `~/.claude/settings.json`, or `CLAUDE.md`.
+
+Both hooks fail silently: no network, no bun, or an unsupported platform simply means commands run unfiltered. Supported platforms are Windows x64, macOS (Intel/Apple Silicon) and Linux (x64/arm64).
+
+Cost of keeping rtk out of PATH: the wrapper adds roughly 155 ms per Bash/PowerShell call, against 64 ms for calling `rtk hook claude` directly — about 70 ms of that is bun's startup. Compiling the wrapper with `bun build --compile` was measured and does not help (172 ms, 112 MB binary), since the same runtime still boots.
+
+Since the binary is not on PATH, invoke it as `"${CLAUDE_PLUGIN_DATA}/bin/rtk"` — the `rtk` skill documents the meta commands (`gain`, `discover`, `cc-economics`).
+
+If you previously ran `rtk init -g`, remove the global hook from `~/.claude/settings.json` (or run `rtk init -g --uninstall`); otherwise both hooks process every command.

@@ -16,6 +16,8 @@
     "./hooks/inject-ask-questions.json",
     "./hooks/inject-grounding.json",
     "./hooks/enforce-ask-user-question.json",
-    "./hooks/validate-json.json"
+    "./hooks/validate-json.json",
+    "./hooks/rtk-install.json",
+    "./hooks/rtk-proxy.json"
   ]
 }
