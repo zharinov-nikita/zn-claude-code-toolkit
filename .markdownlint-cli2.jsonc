@@ -3,6 +3,7 @@
   "config": {
     "default": true,
     "MD013": false, // line length — длинные строки в правилах осознанны
+    "MD024": { "siblings_only": true }, // одинаковые секции в разных версиях CHANGELOG — норма
     "MD033": false, // inline HTML — используется в доках
     "MD041": false // first line heading — не для всех файлов
   },

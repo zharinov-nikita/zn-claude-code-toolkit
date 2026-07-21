@@ -2,6 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "zn-claude-code-toolkit",
   "description": "Personal toolkit plugin with assorted tools for Claude Code",
+  "version": "1.0.0",
   "author": {
     "name": "zharinov-nikita",
     "email": "zharinov.nicita@gmail.com"

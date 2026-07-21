@@ -1,5 +1,6 @@
 {
   "name": "zn-claude-code-toolkit",
+  "version": "1.0.0",
   "type": "module",
   "private": true,
   "scripts": {
@@ -7,11 +8,13 @@
     "check:json": "biome check .",
     "check:ts": "tsc --noEmit",
     "check:md": "markdownlint-cli2 \"**/*.md\"",
-    "fix": "biome check --write ."
+    "fix": "biome check --write .",
+    "release": "bun scripts/release.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.4",
     "@types/bun": "^1.3.14",
+    "git-cliff": "^2.13.1",
     "lefthook": "^2.1.10",
     "markdownlint-cli2": "^0.23.1"
   },
