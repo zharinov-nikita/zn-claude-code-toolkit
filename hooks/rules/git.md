@@ -25,6 +25,14 @@ These rules apply to all git operations in every project.
     - `build` — build system or external dependencies
     - `ci` — CI configuration
 
+## Passing the message to git
+
+Never type a multi-line commit message as a command-line argument. Here-string and heredoc syntax belongs to one shell only (`@'...'@` — PowerShell, `<<EOF` — POSIX shells), and the wrong pairing mangles the message silently instead of failing.
+
+- **Multi-line or non-ASCII message** — write it to a file with the Write tool (e.g. `.git/COMMIT_MSG.txt`), run `git commit -F .git/COMMIT_MSG.txt`, then delete the file. This is shell-independent and works the same on Windows, macOS and Linux.
+- **Single-line ASCII message** — `git commit -m "feat(x): …"` is fine in any shell.
+- After committing a multi-line body, verify it with `git log -1 --format=%B`.
+
 ### Examples
 
 ```text

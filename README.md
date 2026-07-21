@@ -74,6 +74,7 @@ zn-claude-code-toolkit/
 | inject-ask-questions | Hook (UserPromptSubmit) | Choice questions must go through the AskUserQuestion tool |
 | inject-grounding | Hook (UserPromptSubmit) | Verify APIs/configs via ctx7 CLI and web search instead of memory |
 | enforce-ask-user-question | Hook (Stop) | Blocks answers ending with a textual multiple-choice question; requires bun |
+| guard-commit-message | Hook (PreToolUse) | Denies `git commit -m` with a multi-line or non-ASCII message, pointing at `git commit -F <file>`; requires bun |
 | validate-json | Hook (PostToolUse) | Validates .json files right after Write/Edit and feeds syntax errors back to Claude; requires bun |
 | rtk-install | Hook (SessionStart) | Downloads the latest [rtk](https://github.com/rtk-ai/rtk) binary into the plugin's data directory; requires bun |
 | rtk-proxy | Hook (PreToolUse) | Routes Bash/PowerShell commands through rtk to cut token usage 60-90%; requires bun |
@@ -104,6 +105,12 @@ Each hook `cat`s one markdown file from `hooks/rules/` into context on every pro
 ### enforce-ask-user-question
 
 Stop hook: if the final answer ends with a textual multiple-choice question, blocks the stop and forces re-asking via the AskUserQuestion tool. Requires [bun](https://bun.sh); silently skipped when bun is missing.
+
+### guard-commit-message
+
+PreToolUse hook on Bash/PowerShell: denies `git commit -m` when the message spans multiple lines, carries here-string/heredoc markers, or contains non-ASCII characters, and tells Claude to write the message to a file and use `git commit -F <file>` instead.
+
+Multi-line arguments are shell-specific: `@'...'@` is a here-string in PowerShell only, `<<EOF` a heredoc in POSIX shells only. Sending one to the other does not fail — it silently mangles the message (a PowerShell here-string run under bash lands in the commit with a bare `@` as its first and last line, because bash strips the quotes and keeps the `@`s as text). Non-ASCII is denied for the same class of reason: with `-m` the message reaches git through the console code page, which is not UTF-8 on Windows by default. Single-line ASCII `-m` messages pass through untouched. Requires [bun](https://bun.sh); silently skipped when bun is missing.
 
 ### validate-json
 
