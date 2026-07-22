@@ -1,0 +1,16 @@
+{
+  "description": "Injects clarify-first rules (resolve ambiguity by asking, in a loop, before acting)",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat \"${CLAUDE_PLUGIN_ROOT}/hooks/rules/clarify-first.md\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

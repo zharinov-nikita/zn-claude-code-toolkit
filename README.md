@@ -84,6 +84,7 @@ Skills appear in the `/` menu as `zn:<name>` — Claude Code prepends the plugin
 | inject-git-rules | Hook (UserPromptSubmit) | Git rules: Conventional Commits, English messages, no co-author trailers, no commits without permission |
 | inject-response-style | Hook (UserPromptSubmit) | Response style: bottom line first, length follows complexity, no filler |
 | inject-human-language | Hook (UserPromptSubmit) | Live language: no bureaucratic cliches, short sentences (Russian-oriented) |
+| inject-clarify-first | Hook (UserPromptSubmit) | Clarify ambiguous requests in a loop before acting, never assume silently |
 | inject-ask-questions | Hook (UserPromptSubmit) | Choice questions must go through the AskUserQuestion tool |
 | inject-grounding | Hook (UserPromptSubmit) | Verify APIs/configs via ctx7 CLI and web search instead of memory |
 | enforce-ask-user-question | Hook (Stop) | Blocks answers ending with a textual multiple-choice question; requires bun |
@@ -110,6 +111,7 @@ Each hook `cat`s one markdown file from `hooks/rules/` into context on every pro
 - `git.md` — never commit/push without permission; Conventional Commits; English messages; no co-author trailers
 - `response-style.md` — bottom line first, no filler
 - `human-language.md` — live conversational language, no bureaucratese (written for Russian)
+- `clarify-first.md` — keep asking until the request has one reading; never resolve ambiguity silently
 - `ask-questions.md` — choice questions only via the AskUserQuestion tool
 - `grounding.md` — verify library APIs via ctx7 CLI / web search instead of answering from memory (expects [Context7 CLI](https://context7.com) installed)
 

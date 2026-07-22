@@ -21,6 +21,7 @@
     "./hooks/inject-git-rules.json",
     "./hooks/inject-response-style.json",
     "./hooks/inject-human-language.json",
+    "./hooks/inject-clarify-first.json",
     "./hooks/inject-ask-questions.json",
     "./hooks/inject-grounding.json",
     "./hooks/enforce-ask-user-question.json",
