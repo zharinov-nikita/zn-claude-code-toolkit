@@ -141,3 +141,11 @@ Cost of keeping rtk out of PATH: the wrapper adds roughly 155 ms per Bash/PowerS
 Since the binary is not on PATH, invoke it as `"${CLAUDE_PLUGIN_DATA}/bin/rtk"` — the `rtk` skill documents the meta commands (`gain`, `discover`, `cc-economics`).
 
 If you previously ran `rtk init -g`, remove the global hook from `~/.claude/settings.json` (or run `rtk init -g --uninstall`); otherwise both hooks process every command.
+
+#### The "No hook installed" warning is a false alarm
+
+rtk may print `[rtk] /!\ No hook installed — run 'rtk init -g'` on every command. Do **not** follow that advice: `rtk init -g` adds a second hook, and both would then process every command.
+
+rtk only recognizes a hook whose command is exactly `<path>/rtk hook claude` and lives in `~/.claude/settings.json`. This plugin declares a bun wrapper in `plugin.json` instead, so the check cannot match by design — the hook is installed and filtering normally. rtk means to rate limit the warning to once a day, but on Windows it writes an empty buffer to its marker file, which does not update `LastWriteTime` on NTFS, so the limit never applies. `rtk-install` refreshes that marker's timestamp on session start to restore the intended behaviour.
+
+One leak remains: `rtk gain` prints its own copy of the warning without any rate limit. That one can only be fixed upstream.

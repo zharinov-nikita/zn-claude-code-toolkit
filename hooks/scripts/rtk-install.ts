@@ -18,6 +18,7 @@ import {
   renameSync,
   rmSync,
   statSync,
+  utimesSync,
   writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
@@ -35,6 +36,44 @@ const ASSETS: Record<string, string> = {
   "linux:x64": "rtk-x86_64-unknown-linux-musl.tar.gz",
   "linux:arm64": "rtk-aarch64-unknown-linux-gnu.tar.gz",
 };
+
+/**
+ * Silences rtk's false "No hook installed" warning on Windows.
+ *
+ * rtk only recognizes a hook whose command is exactly `<path>/rtk hook claude`
+ * in ~/.claude/settings.json. Ours is a bun wrapper declared in plugin.json, so
+ * the check can never match - yet the hook is installed and working. rtk rate
+ * limits the warning to once a day via the mtime of this marker, but it writes
+ * an empty buffer, which leaves LastWriteTime untouched on NTFS: the limit never
+ * kicks in and the warning is printed on every single command.
+ *
+ * Touching the marker ourselves restores the intended once-a-day behaviour.
+ * Only the timestamp matters - rtk reads the file's metadata, never its content.
+ *
+ * Runs before every early exit below: in a typical session the binary is already
+ * up to date and main() returns immediately.
+ */
+function silenceHookWarning(): void {
+  if (process.platform !== "win32") return; // the empty-write bug is NTFS-specific
+  const localAppData = process.env.LOCALAPPDATA;
+  if (!localAppData) return;
+
+  // Mirrors rtk's own dirs::data_local_dir()/rtk/.hook_warn_last
+  const marker = join(localAppData, "rtk", ".hook_warn_last");
+  const now = new Date();
+  if (existsSync(marker)) {
+    utimesSync(marker, now, now);
+    return;
+  }
+  mkdirSync(join(localAppData, "rtk"), { recursive: true });
+  writeFileSync(marker, "\n"); // non-empty, or the write leaves mtime alone
+}
+
+try {
+  silenceHookWarning();
+} catch {
+  // Cosmetic only: a missing directory or denied write must not break startup.
+}
 
 const dataDir = process.env.CLAUDE_PLUGIN_DATA ?? "";
 const assetName = ASSETS[`${process.platform}:${process.arch}`] ?? "";
