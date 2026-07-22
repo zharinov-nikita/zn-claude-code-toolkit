@@ -8,7 +8,7 @@
   "description": "Personal toolkit plugins for Claude Code",
   "plugins": [
     {
-      "name": "zn-claude-code-toolkit",
+      "name": "zn",
       "source": "./",
       "description": "Personal toolkit plugin with assorted tools for Claude Code"
     }

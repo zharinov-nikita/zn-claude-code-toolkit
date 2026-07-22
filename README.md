@@ -8,19 +8,19 @@ From GitHub (once the repo is pushed):
 
 ```text
 /plugin marketplace add zharinov-nikita/zn-claude-code-toolkit
-/plugin install zn-claude-code-toolkit@zn-claude-code-toolkit
+/plugin install zn@zn-claude-code-toolkit
 ```
 
 From a local clone — this repo is a marketplace on its own, no GitHub involved. Point `marketplace add` at the directory holding `.claude-plugin/`, not at the JSON file:
 
 ```text
 /plugin marketplace add ./
-/plugin install zn-claude-code-toolkit@zn-claude-code-toolkit
+/plugin install zn@zn-claude-code-toolkit
 ```
 
 Paths resolve against the working directory Claude Code was started in, so `./` assumes a session opened at the repo root; from one level up it is `./zn-claude-code-toolkit`. A relative path must keep the `./` prefix — a bare name is read as a GitHub `owner/repo` shorthand and rejected. Forward slashes work on every platform, Windows included.
 
-The `plugin@marketplace` duplication is expected: both carry the same name here. The plugin is copied into the plugin cache on install, so after editing hooks in the working tree run `/plugin marketplace update` to pick the changes up. Add `--scope project` to keep the marketplace registered per project instead of globally. The same commands work from the shell as `claude plugin marketplace add ...`.
+In `plugin@marketplace` the two names differ on purpose: the plugin is `zn` — kept short because it becomes the prefix of every skill it ships — while the marketplace keeps the repository name `zn-claude-code-toolkit`. The plugin is copied into the plugin cache on install, so after editing hooks in the working tree run `/plugin marketplace update` to pick the changes up. Add `--scope project` to keep the marketplace registered per project instead of globally. The same commands work from the shell as `claude plugin marketplace add ...`.
 
 Local development without installing anything:
 
@@ -73,6 +73,8 @@ zn-claude-code-toolkit/
     └── scripts/        # Script-backed hooks
         └── enforce-ask-user-question.ts   # Stop-hook logic (bun)
 ```
+
+Skills appear in the `/` menu as `zn:<name>` — Claude Code prepends the plugin name itself, so the `name:` field inside a `SKILL.md` stays bare (`rtk`, not `zn-rtk`); spelling the prefix out there only duplicates it.
 
 ## Tools
 

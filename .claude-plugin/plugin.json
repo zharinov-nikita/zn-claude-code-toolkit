@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "zn-claude-code-toolkit",
+  "name": "zn",
   "description": "Personal toolkit plugin with assorted tools for Claude Code",
   "version": "1.0.0",
   "author": {
