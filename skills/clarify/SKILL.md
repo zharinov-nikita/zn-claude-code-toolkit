@@ -1,6 +1,6 @@
 ---
 name: clarify
-description: Interrogate a vague task until it has exactly one reading, then write the agreed understanding as a short spec. Use when the user asks to clarify a task, says the request is vague or half-baked, wants requirements pinned down before any code is written, asks what is unclear or what is missing, or wants the task broken down before planning. Triggers on "уточняющие вопросы", "задай уточняющие вопросы", "уточни", "разбери задачу", "что непонятно", "задача расплывчатая", "clarify", "ask clarifying questions", "pin down requirements".
+description: Interrogate a vague task until it has exactly one reading, write the understanding as a short spec, then get it confirmed before any work starts. Use when the user asks to clarify a task, says the request is vague or half-baked, wants requirements pinned down before any code is written, asks what is unclear or what is missing, or wants the task broken down before planning. Triggers on "уточняющие вопросы", "задай уточняющие вопросы", "уточни", "разбери задачу", "что непонятно", "задача расплывчатая", "clarify", "ask clarifying questions", "pin down requirements".
 ---
 
 # Clarify a task until it has one reading
@@ -17,7 +17,7 @@ cycle.
 
 ## Procedure
 
-Run these steps in order. Do not skip step 2. When no task is on the table yet — a bare
+Run these steps in order. Do not skip steps 2 and 6. When no task is on the table yet — a bare
 manual invocation — ask what the task is as free text, then start at step 1.
 
 ### 1. Enumerate the forks
@@ -72,8 +72,38 @@ write them in the session response language.
 - <how completion is judged>
 ```
 
-Keep it under a page. This is the last cheap moment to catch a mismatch, and it feeds
-directly into plan mode as the input a plan can be built on.
+Keep it under a page. The spec is a readback, not a verdict: it exposes the reading that
+was arrived at, in a form short enough to check before any code exists. Out of scope must
+name boundaries the user implied but never said, and Done when must be checkable — a spec
+that only rephrases the request under headings proves nothing.
+
+### 6. Get the reading confirmed, then hand off
+
+Never treat the spec as agreed by default. Close with **one** `AskUserQuestion` question
+whose options fold the verdict and the next step together, so a rejected spec never drags
+a next step along with it:
+
+- `Верно → сначала план` (recommended) — write the implementation plan as the next reply,
+  before touching any file.
+- `Верно → сразу реализация` — for tasks small enough not to need a plan.
+- `Нужны правки` — the reading is wrong.
+
+On `Нужны правки`, apply the correction and re-issue the spec. Route it through step 4
+only when the correction itself opens a new fork; a one-word fix goes straight back to
+step 5. A correction here is the skill working, not a failure. On a second round of
+corrections, stop questioning: apply what was said, list the remaining assumptions, and
+move on.
+
+Do not start editing files on the strength of the spec alone. The spec settles *what*, a
+plan settles *how*, and skipping the handoff collapses the two.
+
+Two branches replace the question entirely:
+
+- **Already in plan mode** — the spec belongs in the plan, and approval goes through
+  `ExitPlanMode`, not `AskUserQuestion`. Entering plan mode is the user's action
+  (`Shift+Tab`); never claim to have entered it.
+- **`AskUserQuestion` unavailable** (subagents, headless) — emit the spec, mark it
+  explicitly as unconfirmed, and end. Let the caller confirm.
 
 ## Checklist of dimensions
 
@@ -111,7 +141,8 @@ it explicitly in the reply. An unspoken assumption is worse than a redundant que
 2. Nothing in the repo answers either.
 3. Ask direction → "поперёк".
 4. Re-run: "поперёк" opens "two pieces or slices?" → ask → "два куска".
-5. Spec: "Режу поперёк, два равных куска." Then act.
+5. Spec: "Режу поперёк, два равных куска."
+6. Confirm the reading and ask what follows — plan first, or cut straight away.
 
 Counter-example — `переименуй параметр x в count в counter.ts` has one reading. No
 forks, no questions, execute directly.
