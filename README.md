@@ -92,6 +92,7 @@ Skills appear in the `/` menu as `zn:<name>` — Claude Code prepends the plugin
 | rtk-install | Hook (SessionStart) | Downloads the latest [rtk](https://github.com/rtk-ai/rtk) binary into the plugin's data directory; requires bun |
 | rtk-proxy | Hook (PreToolUse) | Routes Bash/PowerShell commands through rtk to cut token usage 60-90%; requires bun |
 | clarify | Skill | Interrogates a vague task until it has one reading, then writes the agreed understanding as a short spec |
+| ideas | Skill | Turns a half-formed wish into 3-4 deliberately different options, lets you pick, then goes deep on the pick |
 | rtk | Skill | rtk meta commands: savings analytics, adoption stats, unfiltered escape hatches |
 
 ### inject-language

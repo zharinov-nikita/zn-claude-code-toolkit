@@ -1,6 +1,6 @@
 ---
 name: clarify
-description: Interrogate a vague task until it has exactly one reading, write the understanding as a short spec, then get it confirmed before any work starts. Use when the user asks to clarify a task, says the request is vague or half-baked, wants requirements pinned down before any code is written, asks what is unclear or what is missing, or wants the task broken down before planning. Triggers on "уточняющие вопросы", "задай уточняющие вопросы", "уточни", "разбери задачу", "что непонятно", "задача расплывчатая", "clarify", "ask clarifying questions", "pin down requirements".
+description: Interrogate a vague task until it has exactly one reading, write the understanding as a short spec, then get it confirmed before any work starts. Use when the user asks to clarify a task, says the request is vague or half-baked, wants requirements pinned down before any code is written, asks what is unclear or what is missing, or wants the task broken down before planning. Not for producing options when the user has no idea yet - that is the zn:ideas skill. Triggers on "уточняющие вопросы", "задай уточняющие вопросы", "уточни", "разбери задачу", "что непонятно", "задача расплывчатая", "clarify", "ask clarifying questions", "pin down requirements".
 ---
 
 # Clarify a task until it has one reading
