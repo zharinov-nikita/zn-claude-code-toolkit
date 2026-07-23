@@ -83,8 +83,10 @@ Never treat the spec as agreed by default. Close with **one** `AskUserQuestion` 
 whose options fold the verdict and the next step together, so a rejected spec never drags
 a next step along with it:
 
-- `Верно → сначала план` (recommended) — write the implementation plan as the next reply,
-  before touching any file.
+- `Верно → сначала план` (recommended) — enter native plan mode with `EnterPlanMode`, draft
+  the implementation plan into the plan file on top of the confirmed spec, then send it for
+  approval with `ExitPlanMode`, which reads the plan back from that file. Do not write the
+  plan as a plain reply.
 - `Верно → сразу реализация` — for tasks small enough not to need a plan.
 - `Нужны правки` — the reading is wrong.
 
@@ -100,8 +102,8 @@ plan settles *how*, and skipping the handoff collapses the two.
 Two branches replace the question entirely:
 
 - **Already in plan mode** — the spec belongs in the plan, and approval goes through
-  `ExitPlanMode`, not `AskUserQuestion`. Entering plan mode is the user's action
-  (`Shift+Tab`); never claim to have entered it.
+  `ExitPlanMode`, not `AskUserQuestion`. The mode is already active; do not call
+  `EnterPlanMode` again.
 - **`AskUserQuestion` unavailable** (subagents, headless) — emit the spec, mark it
   explicitly as unconfirmed, and end. Let the caller confirm.
 
@@ -142,7 +144,8 @@ it explicitly in the reply. An unspoken assumption is worse than a redundant que
 3. Ask direction → "поперёк".
 4. Re-run: "поперёк" opens "two pieces or slices?" → ask → "два куска".
 5. Spec: "Режу поперёк, два равных куска."
-6. Confirm the reading and ask what follows — plan first, or cut straight away.
+6. Confirm the reading and ask what follows — plan first (enter native plan mode), or cut
+   straight away.
 
 Counter-example — `переименуй параметр x в count в counter.ts` has one reading. No
 forks, no questions, execute directly.
